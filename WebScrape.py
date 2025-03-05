@@ -13,9 +13,9 @@ class Page:
     def get_product_name(self):
         self.page = requests.get(self.url, headers=self.headers)
         self.soup = BeautifulSoup(self.page.text, features="html.parser")
-        self.name = re.findall(".+ - Opinie i ceny na Ceneo.pl", self.soup.title.get_text())
+        self.name = self.soup.find("h1", class_ = "product-top__product-info__name js_product-h1-link js_product-force-scroll js_searchInGoogleTooltip default-cursor")
         if self.name:
-            self.name = self.name[0][:-28]
+            self.name = self.name.text
         else:
             self.name = None
             
@@ -34,11 +34,12 @@ class Page:
     
     def format_comments(self):
         self.comments = self.get_comments()
-        
-        self.opinions = []
-        for comment in self.comments:
-            self.comment_data = self.get_comment_data(comment)
-            self.opinions.append(self.comment_data)
+        if self.comments:
+            self.opinions = []
+            for comment in self.comments:
+                self.comment_data = self.get_comment_data(comment)
+                self.opinions.append(self.comment_data)
+        else: self.opinions = None
             
         return self.opinions
         
@@ -150,10 +151,45 @@ class Page:
         return self.purchase_date
     
 
+def main(url):
+    product = Page(url)
+    name = product.get_product_name()
+    if name:
+        print(name)
+        comments = product.format_comments()
+        if comments:
+            for comment in comments:
+                print()
+                for key, value in comment.items():
+                    print(f"{key}: {value}")
+        else: 
+            print("No comments are avaliable\n\n:(")
+    else:
+        print("Bad code, nothing could be scrapped\n\n:(")
+        
+def test():
+    import random
+    l = 0
+    for i in [
+    "74463012",
+    "98237465",
+    "65120987",
+    "47382910",
+    "56289134",
+    "10928374",
+    "83746521",
+    "21436587",
+    "90817263",
+    "37485921"]:
+        p = Page(i)
+        name = p.get_product_name()
+        print(name)
+        l = p.format_comments()
+        if l:
+            print(len(l))
+        else:
+            print(l)
+            
+    
 if __name__ == "__main__":
-    product = Page("158655614")
-    print(product.get_product_name())
-    for comment in product.format_comments():
-        print()
-        for key, value in comment.items():
-            print(f"{key}: {value}")
+    test()
