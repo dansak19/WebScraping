@@ -9,9 +9,10 @@ class Page:
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
             "Referer": "https://www.google.com/"}
+        self.base_page = requests.get(self.url, headers=self.headers)
         
     def get_product_name(self):
-        self.page = requests.get(self.url, headers=self.headers)
+        self.page = self.base_page
         self.soup = BeautifulSoup(self.page.text, features="html.parser")
         self.name = self.soup.find("h1", class_ = "product-top__product-info__name js_product-h1-link js_product-force-scroll js_searchInGoogleTooltip default-cursor")
         if self.name:
@@ -20,6 +21,17 @@ class Page:
             self.name = None
             
         return self.name
+    
+    def get_comments_amount(self):
+        self.page = self.base_page
+        self.soup = BeautifulSoup(self.page.text, features="html.parser")
+        self.amount = self.soup.find("a", class_ = "product-review__link link link--accent js_reviews-link js_clickHash js_seoUrl")
+        if self.amount:
+            self.amount = self.amount.find("span")
+            self.amount = self.amount.text
+        else: self.amount = None
+        
+        return self.amount
         
     def get_comments(self):
         self.page = requests.get(f"{self.url}#tab=reviews", headers=self.headers)
@@ -184,6 +196,8 @@ def test():
         p = Page(i)
         name = p.get_product_name()
         print(name)
+        comm = p.get_comments_amount()
+        print(comm)
         l = p.format_comments()
         if l:
             print(len(l))
