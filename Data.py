@@ -2,8 +2,9 @@ import json
 import os
 import re
 
-def save(id, name, opinions):
+def save(id, name, amount, opinions):
     data = {"name": name,
+            "opinions amount": amount,
             "opinions": opinions}
     
     path = f"data/{id}.json"
