@@ -1,6 +1,6 @@
 {
     "name": "Microsoft Windows 11 Pro (kod) (4251972945585)",
-    "opinions amount": "259",
+    "opinions amount": "261",
     "opinions": [
         {
             "id": "18302765",
@@ -106,21 +106,17 @@
             "purchase time": "2025-01-16 22:05:45"
         },
         {
-            "id": "19408703",
-            "author": "Patryk",
-            "recommendation": "Polecam",
-            "score": 5.0,
-            "content": "Stosunkowo szybka dostawa e-mail z kluczem oraz instrukcjami, z kt\u00f3rych pomoc\u0105 aktywacja posz\u0142a bezproblemowo.",
-            "advantages": [
-                "funkcjonalno\u015b\u0107",
-                "\u0142atwo\u015b\u0107 obs\u0142ugi",
-                "mo\u017cliwo\u015bci"
-            ],
+            "id": "19497884",
+            "author": "a...k",
+            "recommendation": null,
+            "score": 0.5,
+            "content": "Kupi\u0142em klucz do Windows 11 Pro, kt\u00f3ry chcia\u0142em u\u017cy\u0107 dopeiro 2 tyg. po zakupie, gdy\u017c PC by\u0142 w pude\u0142ku i komunikat, \u017ce klucz ju\u017c zosta\u0142 wykorzystany. Nie polecam.",
+            "advantages": null,
             "disadvantages": null,
             "likes": "0",
             "dislikes": "0",
-            "publish time": "2025-01-28 15:42:23",
-            "purchase time": "2025-01-28 13:41:16"
+            "publish time": "2025-03-07 14:24:42",
+            "purchase time": "2025-02-09 11:15:30"
         },
         {
             "id": "19494040",

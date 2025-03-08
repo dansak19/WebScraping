@@ -3,35 +3,73 @@ import requests
 import re
 
 class Page:
-    def __init__(self, code):
-        self.code = code
-        self.url = f"https://www.ceneo.pl/{code}"
+    def __init__(self, id):
+        self.id = id
+        self.url = f"https://www.ceneo.pl/{id}"
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
             "Referer": "https://www.google.com/"}
-        self.base_page = requests.get(self.url, headers=self.headers)
+        
+    def connect(self):
+        try:
+            self.base_page = requests.get(self.url, headers=self.headers)
+            
+            return {"code": 0}
+        except:
+            return {"code": 1}
         
     def get_product_name(self):
         self.page = self.base_page
         self.soup = BeautifulSoup(self.page.text, features="html.parser")
         self.name = self.soup.find("h1", class_ = "product-top__product-info__name js_product-h1-link js_product-force-scroll js_searchInGoogleTooltip default-cursor")
         if self.name:
+            self.code = 0
             self.name = self.name.text
         else:
-            self.name = None
+            self.code = 1
             
-        return self.name
+        if not self.code:
+            return {"code": self.code,
+                    "result": self.name}
+        else:
+            return {"code": self.code}
     
     def get_comments_amount(self):
         self.page = self.base_page
         self.soup = BeautifulSoup(self.page.text, features="html.parser")
         self.amount = self.soup.find("a", class_ = "product-review__link link link--accent js_reviews-link js_clickHash js_seoUrl")
         if self.amount:
+            self.code = 0
             self.amount = self.amount.find("span")
             self.amount = self.amount.text
-        else: self.amount = None
+        else: 
+            self.code = 1
         
-        return self.amount
+        if not self.code:
+            return {"code": self.code,
+                    "result": self.amount}
+        else:
+            return {"code": self.code}
+        
+    def get_next_page(self, page):
+        self.page = page
+        self.soup = BeautifulSoup(self.page.text, features="html.parser")
+        self.pages = self.soup.find_all("a", class_ = "pagination__item")
+        if self.pages:
+            self.code = 0
+            self.current = 1
+            for page in self.pages:
+                if page.text.isdigit():
+                    if self.current < int(page.text):
+                        self.current = int(page.text)
+        else:
+            self.code = 1
+            
+        if not self.code:
+            return {"code": self.code,
+                    "result": self.current}
+        else:
+            return {"code": self.code}
         
     def get_comments(self):
         self.page = requests.get(f"{self.url}#tab=reviews", headers=self.headers)
@@ -39,22 +77,53 @@ class Page:
         self.comment_section = self.soup.find("div", class_ = "js_product-reviews js_reviews-hook js_product-reviews-container")
         
         if self.comment_section:
+            self.code1 = 0
             self.comments = self.comment_section.find_all("div", class_="user-post user-post__card js_product-review")
-        else: self.comments = None
+        else: self.code1 = 1
         
-        return self.comments
+        if not self.code1:
+            self.n_page = 1
+            self.n_pages = self.get_next_page(self.page)
+            if not self.n_pages["code"]:
+                self.n_pages = self.n_pages["result"]
+                        
+                while self.n_page < self.n_pages:
+                    self.n_page += 1
+                    self.page = requests.get(f"{self.url}/opinie-{self.n_page}", headers=self.headers)
+                    self.soup = BeautifulSoup(self.page.text, features="html.parser")
+                    self.comment_section = self.soup.find("div", class_ = "js_product-reviews js_reviews-hook js_product-reviews-container")
+                    if self.comment_section:
+                        self.comments += self.comment_section.find_all("div", class_="user-post user-post__card js_product-review")
+                        
+                        self.n_pages = self.get_next_page(self.page)
+                        if not self.n_pages["code"]:
+                            self.n_pages = self.n_pages["result"]
+                        else: break
+                    else: break
+        
+        if not self.code1:
+            return {"code": self.code1,
+                    "result": self.comments}
+        else:
+            return {"code": self.code1}
     
     def format_comments(self):
         self.comments = self.get_comments()
-        if self.comments:
+        if not self.comments["code"]:
+            self.code = 0
+            self.comments = self.comments["result"]
             self.opinions = []
             for comment in self.comments:
                 self.comment_data = self.get_comment_data(comment)
                 self.opinions.append(self.comment_data)
-        else: self.opinions = None
+        else: self.code = 1
             
-        return self.opinions
-        
+        if not self.code:
+            return {"code": self.code,
+                    "result": self.opinions}
+        else:
+            return {"code": self.code}    
+            
     def get_comment_data(self, opinion):
         self.review = {}
         self.review["id"] = self.get_id(opinion)
@@ -177,10 +246,9 @@ def main(url):
         else: 
             print("No comments are avaliable\n\n:(")
     else:
-        print("Bad code, nothing could be scrapped\n\n:(")
+        print("Bad id, nothing could be scrapped\n\n:(")
         
 def test():
-    import random
     l = 0
     for i in [
     "74463012",
@@ -194,15 +262,18 @@ def test():
     "90817263",
     "37485921"]:
         p = Page(i)
+        p.connect()
         name = p.get_product_name()
         print(name)
         comm = p.get_comments_amount()
         print(comm)
         l = p.format_comments()
-        if l:
-            print(len(l))
-        else:
-            print(l)
+        if not l["code"]:
+            l = l["result"]
+            if l:
+                print(len(l))
+            else:
+                print(l)
             
     
 if __name__ == "__main__":
