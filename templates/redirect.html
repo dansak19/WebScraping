@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Redirecting...{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    window.onload = function() {
+        // Javascript to open a new tab using the provided URL
+        window.open('{{ url }}', '_blank');
+    }
+</script>
+<p>If not redirected, <a href="{{ url }}" target="_blank" rel="noopener noreferrer">Click here</a> to proceed.</p>
+{% endblock %}

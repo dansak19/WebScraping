@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F1F0E8; /* Lightest sandy color for the background */
+            color: #333; /* Dark text color for readability */
+        }
+    
+        header {
+            background-color: #89A8B2; /* Soft blue for the header */
+            padding: 10px 20px;
+            text-align: center;
+            color: #333; /* Dark text for contrast */
+        }
+    
+        header h1 {
+            color: #333; /* Keeping the text color consistent with other text */
+            background-color: #B3C8CF; /* Light blue for h1 similar to a links */
+            padding: 10px 20px;
+            border-radius: 10px; /* Rounded corners */
+            display: inline-block; /* Ensures background doesn't extend full line width */
+        }
+    
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+    
+        nav ul li a {
+            text-decoration: none;
+            color: #333; /* Main text color for links */
+            font-weight: bold;
+            background-color: #B3C8CF; /* Lighter blue for link background */
+            padding: 5px 10px;
+            border-radius: 10px; /* Rounded corners for the links */
+        }
+    
+        nav ul li a:hover {
+            background-color: #E5E1DA; /* Change to sandy color for hover based on h1 current color */
+        }
+    
+        main {
+            padding: 20px;
+            background-color: #FFF; /* Maintaining a clean white background for the main content area */
+            margin: 15px 30px;
+            border-radius: 8px; /* Soft rounded corners for the content box */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+        }
+    
+        footer {
+            text-align: center;
+            padding: 12px 20px;
+            background-color: #89A8B2; /* Mirroring the header color in the footer */
+            color: #333; /* Consistent text color fostering unity in design */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Review App</h1>
+        <nav>
+            <ul>
+                <li><a href="/extract">Extraction of Opinions</a></li>
+                <li><a href="/products">List of Products</a></li>
+                <li><a href="/">Home Page</a></li>
+                <li><a href="/about">About the Author</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 Review App. All rights reserved.</p>
+    </footer>
+</body>
+</html>
