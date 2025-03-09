@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Produkt
+{% endblock %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Produkt: {{ product.name }}</th>
+        <th>ID Produktu: <a class="white" href="https://www.ceneo.pl/{{ product.id }}", target="_blank">{{ product.id }}</a></th>
+        <th style="text-align: right;">
+            <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='csv') }}">Pobierz CSV</a>
+            <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='xlsx') }}">Pobierz XLSX</a>
+            <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='json') }}">Pobierz JSON</a>
+            <a class="white" href="{{ url_for('charts', product_id=product.id) }}">Wykresy</a>
+        </th>
+    </tr>
+</table>
+{% if reviews|length < 1 %}
+<p>Niestety, ten produkt nie ma opinii</p>
+{%else %}
+<!-- Table with sortable headers -->
+<table id="sortableTable" border="1">
+    <thead>
+        <tr>
+            <th data-type="number" style="width: 100px;">ID</th>
+            <th data-type="string" >Autor</th>
+            <th data-type="string" style="width: 120px;">Rekomendacja</th>
+            <th data-type="number" style="width: 70px;">Gwiazdy</th>
+            <th data-type="list">Opinia</th>
+            <th data-type="list" style="width: 90px;">Zalety</th>
+            <th data-type="list" style="width: 90px;">Wady</th>
+            <th data-type="number" style="width: 60px;">Likes</th>
+            <th data-type="number" style="width: 60px;">Dislikes</th>
+            <th data-type="string" style="width: 85px;">Wystawiona</th>
+            <th data-type="string" style="width: 85px;">Zakupiony</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td style="max-width: 100px;">{{ review.id }}</td>
+            <td >{{ review.author }}</td>
+            <td>{{ review.recommendation }}</td>
+            <td>{{ review.score }}</td>
+            <td>{{ review.content }}</td>
+            <td style="max-width: 150px;">
+                {% for advantage in review.advantages %}
+                <p>{{ advantage }}</p>
+                {% endfor %}
+            </td>
+            <td style="max-width: 150px;">
+                {% for disadvantage in review.disadvantages %}
+                <p>{{ disadvantage }}</p>
+                {% endfor %}
+            </td>
+            <td>{{ review.likes }}</td>
+            <td>{{ review.dislikes }}</td>
+            <td>
+                {% for time in review.publish_time %}
+                <p>{{ time }}</p>
+                {% endfor %}
+            </td>
+            <td>
+                {% for time in review.purchase_time %}
+                <p>{{ time }}</p>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    // Function to sort table
+    document.addEventListener('DOMContentLoaded', () => {
+        const table = document.getElementById('sortableTable');
+        const headers = table.querySelectorAll('th'); // Get table headers
+
+        headers.forEach((header, index) => {
+            header.addEventListener('click', () => {
+                const type = header.getAttribute('data-type'); // Get data type
+                const isAscending = header.classList.contains('asc');
+                sortTable(table, index, type, !isAscending); // Toggle direction
+                headers.forEach(h => h.classList.remove('asc', 'desc')); // Reset classes
+                header.classList.add(isAscending ? 'desc' : 'asc'); // Set current header class
+            });
+        });
+    });
+
+    function sortTable(table, columnIndex, type, ascending) {
+        const rows = Array.from(table.tBodies[0].rows);
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].innerText.trim();
+            const cellB = rowB.cells[columnIndex].innerText.trim();
+
+            if (type === 'number') { // Numeric comparison
+                return ascending ? cellA - cellB : cellB - cellA;
+            } else if (type === 'list') { // List comparison
+                // Character count comparison
+            const charsA = cellA.length;
+            const charsB = cellB.length;
+
+            return ascending ? charsA - charsB : charsB - charsA;
+                return ascending ? dateA - dateB : dateB - dateA;
+            } else { // String comparison
+                return ascending
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
+            }
+        });
+
+        rows.forEach(row => table.tBodies[0].appendChild(row)); // Re-render sorted rows
+    }
+</script>
+{% endif %}
+<style>
+    th {
+        cursor: pointer;
+    }
+    th.asc::after {
+        content: " ▲"; /* Up arrow */
+    }
+    th.desc::after {
+        content: " ▼"; /* Down arrow */
+    }
+</style>
+
+{% endblock %}

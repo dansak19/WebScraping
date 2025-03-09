@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Extraction{% endblock %}
+{% block title %}Ekstrakcja{% endblock %}
 
 {% block content %}
-<h2>Product Review Extraction</h2>
+<h2>Ekstrakcja opinii o produkcie</h2>
 <form action="/extract" method="POST">
-    <label for="product_id">Enter Product ID:</label>
+    <label for="product_id">Podaj ID produktu:</label>
     <input type="text" id="product_id" name="product_id" required>
-    <button type="submit">Extract Reviews</button>
+    <button type="submit">Ekstrakcja</button>
 </form>
 {% endblock %}

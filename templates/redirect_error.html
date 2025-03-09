@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Error - Invalid Product ID{% endblock %}
+{% block title %}Błąd - nieprawidłowe ID produktu{% endblock %}
 
 {% block content %}
-<h2>Invalid Product ID</h2>
-<p>The Product ID you provided does not exist. Please ensure the ID is correct and try again.</p>
-<p>Use the navigation menu to return to the previous page and try to attempt another search.</p>
+<h2>Nieprawidłowe ID produktu</h2>
+<p>Podany identyfikator produktu "{{ product_id }}" nie istnieje. Upewnij się, że ID jest poprawne, i spróbuj ponownie.</p>  
+<p>Użyj menu nawigacyjnego, aby wrócić do poprzedniej strony i spróbować wyszukać ponownie.</p>
 {% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Lista Produktów{% endblock %}
+
+{% block content %}
+<h1>Lista Produktów</h1>
+{% if products|length < 1 %}
+<p>Zrób ekstrakcję żeby coś tu zobaczyć </p>
+{%else %}
+<table>
+    <thead>
+        <tr>
+            <th>ID Produktu</th>
+            <th>Nazwa Produktu</th>
+            <th style="max-width: 100px;">Liczba Opinii</th>
+            <th style="max-width: 100px;">Liczba Pozyskanych Opinii</th>
+            <th style="max-width: 70px;" >Liczba Zalet</th>
+            <th style="max-width: 70px;">Liczba Wad</th>
+            <th style="max-width: 70px;" >Średnia Ocena</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td><a href="https://www.ceneo.pl/{{ product.id }}", target="_blank">{{ product.id }}</a></td>
+            <td><a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a></td>
+            <td>{{ product.opinions_count }}</td>
+            <td>{{ product.extracted_count }}</td>
+            <td>{{ product.advantage_count }}</td>
+            <td>{{ product.disadvantage_count }}</td>
+            <td>{{ product.average_rating }}</td>
+            <td style="max-width: 70px;">
+                <a href="{{ url_for('download_reviews', product_id=product.id, format='csv') }}">CSV</a>
+                <a href="{{ url_for('download_reviews', product_id=product.id, format='xlsx') }}">XLSX</a>
+                <a href="{{ url_for('download_reviews', product_id=product.id, format='json') }}">JSON</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

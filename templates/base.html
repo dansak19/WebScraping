@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{% block title %}Zbieracz opinii{% endblock %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,6 +26,43 @@
             padding: 10px 20px;
             border-radius: 10px; /* Rounded corners */
             display: inline-block; /* Ensures background doesn't extend full line width */
+        }
+
+        a {  /* Apply these styles globally to all <a> tags */
+            text-decoration: none;
+            color: #333; /* Text color */
+            font-weight: bold;
+            background-color: #B3C8CF; /* Soft light blue background */
+            padding: 5px 10px; /* Padding for a better clickable area */
+            border-radius: 10px; /* Rounded corners for modern look */
+            display: inline-block; /* Ensures proper display and spacing */
+            margin-bottom: 1px;
+        }
+    
+        a:hover {
+            background-color: #89A8B2; /* Darker blue on hover */
+        }
+
+        .white:hover {
+            background-color: #E5E1DA;    
+        }
+
+        /* Style all buttons globally to look like your links */
+        button {
+            text-decoration: none;         /* Remove text underline */
+            color: #333;                   /* Text color, same as your links */
+            font-weight: bold;             /* Bold text */
+            background-color: #B3C8CF;     /* Soft light blue background */
+            padding: 5px 10px;             /* Padding for clickable area */
+            border-radius: 10px;           /* Rounded corners for a modern look */
+            display: inline-block;         /* Ensures proper display */
+            margin-bottom: 1px;            /* Adds margin to nearby elements */
+            border: none;                  /* Remove default button borders */
+            cursor: pointer;               /* Pointer cursor to indicate a clickable element */
+        }
+
+        button:hover {
+            background-color: #89A8B2;    
         }
     
         nav ul {
@@ -52,11 +89,12 @@
         }
     
         main {
+            width: 95%; /* Use 100% width to be flexible */
+            margin: 20px auto; /* Top and bottom margin for some spacing, auto for centering left and right */
             padding: 20px;
-            background-color: #FFF; /* Maintaining a clean white background for the main content area */
-            margin: 15px 30px;
-            border-radius: 8px; /* Soft rounded corners for the content box */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: for aesthetic shadow */
+            border-radius: 10px; /* Optional: for curved corners */
+            background-color: white; /* Background color for the content area */
         }
     
         footer {
@@ -65,17 +103,34 @@
             background-color: #89A8B2; /* Mirroring the header color in the footer */
             color: #333; /* Consistent text color fostering unity in design */
         }
+
+        table {
+            width: 100%; /* Full-width for table */
+            border-collapse: collapse; /* Remove space between borders */
+            border: 2px solid #89A8B2; /* Soft blue border around table and cells */
+        }
+    
+        th, td {
+            border: 1px solid #89A8B2; /* Same color for the borders of table headers and cells */
+            padding: 8px; /* Padding inside cells for a better text display */
+            text-align: left; /* Aligning table content to the left */
+        }
+    
+        th {
+            background-color: #89A8B2; /* Soft blue background for headers */
+            color: white; /* White text for headers for readability */
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Review App</h1>
+        <h1>Zbieracz opinii</h1>
         <nav>
             <ul>
-                <li><a href="/extract">Extraction of Opinions</a></li>
-                <li><a href="/products">List of Products</a></li>
-                <li><a href="/">Home Page</a></li>
-                <li><a href="/about">About the Author</a></li>
+                <li><a href="/extract">Ekstrakcja opinii</a></li>
+                <li><a href="/products">Lista produktów</a></li>
+                <li><a href="/">Strona główna</a></li>
+                <li><a href="/about">O autorze</a></li>
             </ul>
         </nav>
     </header>
@@ -86,7 +141,7 @@
     </main>
 
     <footer>
-        <p>© 2025 Review App. All rights reserved.</p>
+        <p>© 2025 Zbieracz opinii. Wszelkie prawa zastrzeżone.</p>
     </footer>
 </body>
 </html>
