@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import WebScrape
 import Data
 
@@ -120,7 +120,14 @@ def product_detail(product_id):
 
 @app.route('/download/<product_id>/<format>')
 def download_reviews(product_id, format):
-    return f'Download {format} reviews for Product {product_id} - Implement download logic.'
+    if format == "csv":
+        path = Data.save_csv(product_id)
+    elif format == "xlsx":
+        path = Data.save_xlsx(product_id)
+    elif format == "json":
+        path = Data.save_json(product_id)
+    print(path)
+    return send_file(path, as_attachment=True)
 
 @app.route('/products/<product_id>/charts')
 def charts(product_id):
