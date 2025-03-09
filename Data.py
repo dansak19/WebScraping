@@ -119,6 +119,8 @@ def save_csv(id):
                     review.append(v)
                     
                 csv_file.writerow(review)
+                
+    return path
         
 if __name__ == "__main__":
     save_csv("66786315")
