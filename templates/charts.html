@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Wykresy
+{% endblock %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Produkt: {{ name }}</th>
+        <th>ID Produktu: <a class="white" href="https://www.ceneo.pl/{{ product_id }}", target="_blank">{{ product_id }}</a></th>
+        <th style="text-align: right;">
+            <a class="white" href="{{ url_for('product_detail', product_id=product_id) }}">Wrócić na stronę produktu</a>
+        </th>
+    </tr>
+</table>
+<h2>Wykres kołowy:</h2>
+<table style="border: 0px"><tr style="border: 0px"><th style="background-color: #ffffff; text-align: center; border: 0px">
+<img src="/products/{{ product_id }}/pie" alt="Pie Chart" style="width:70%; height:auto; align: right;">
+</th></tr></table>
+<h2>Wykres słupkowy:</h2>
+<table style="border: 0px"><tr style="border: 0px"><th style="background-color: #ffffff; text-align: center; border: 0px">
+<img src="/products/{{ product_id }}/bar" alt="Bar Chart" style="width:70%; height:auto; align: right;">
+</th></tr></table>
+
+{% endblock %}

@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, Response
+import matplotlib
+import matplotlib.pyplot as plt
+from io import BytesIO
+import time
 import WebScrape
 import Data
 
 app = Flask(__name__)
+
+matplotlib.use('Agg') 
 
 # -------
 
@@ -73,7 +79,7 @@ def products():
             product["advantage_count"] = advantages
             product["disadvantage_count"] = disadvantages
             avg = avg / amo
-            product["average_rating"] = avg
+            product["average_rating"] = round(avg, 2)
         elif not extract["opinions amount"]:
             product["opinions_count"] = 0
         products.append(product)
@@ -131,7 +137,94 @@ def download_reviews(product_id, format):
 
 @app.route('/products/<product_id>/charts')
 def charts(product_id):
-    return f'Charts for {product_id}'
+    name = Data.get(product_id)["name"]
+    return render_template('charts.html', name = name, product_id = product_id)
+@app.route('/products/<product_id>/delete')
+def delete(product_id):
+    name = Data.get(product_id)["name"]
+    Data.delete(product_id)
+    return render_template('delete.html', name = name, product_id = product_id)
+
+@app.route('/products/<product_id>/pie')
+def pie_cart(product_id):
+    opinions = Data.get(product_id)["opinions"]
+    recomendations = {'Polecam': 0, 
+                      'Nie polecam': 0, 
+                      'Niema rekomendacji': 0}
+    
+    for opinion in opinions:
+        if opinion["recommendation"]:
+            if opinion["recommendation"] == "Polecam":
+                recomendations["Polecam"] += 1
+            elif opinion["recommendation"] == "Nie polecam":
+                recomendations["Nie polecam"] += 1
+        else:
+            recomendations["Niema rekomendacji"] += 1
+            
+    to_del = []
+    for key, value in recomendations.items():
+        if not value:
+            to_del.append(key)
+    for key in to_del:
+        del recomendations[key]
+        
+    explode = [0.1]
+    for i in range(len(recomendations.keys()) - 1):
+        explode.append(0)
+    print(explode)
+    
+    colors = ["#4A6572", "#C68F6C", "#7D7461"]
+
+    fig, ax = plt.subplots()
+    ax.pie(
+        recomendations.values(),
+        explode = explode,
+        labels=recomendations.keys(),
+        autopct='%1.1f%%', 
+        colors=colors,
+        startangle=90,
+    )
+    ax.axis('equal')  
+    
+    img = BytesIO()
+    plt.savefig(img, format='png', dpi=300)
+    img.seek(0)  
+    plt.close()  
+
+    time.sleep(0.05)
+
+    return Response(img.getvalue(), mimetype='image/png')
+
+@app.route('/products/<product_id>/bar')
+def bar_chart(product_id):
+    opinions = Data.get(product_id)["opinions"]
+    ratings = {}
+    scores = []
+    for opinion in opinions:
+        scores.append(opinion["score"])
+    for score in set(scores):
+        ratings[str(score)] = 0
+    for opinion in opinions:
+        ratings[str(opinion["score"])] += 1
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    
+    colors = ["#4A6572", "#C68F6C", "#7D7461"]
+
+    ax.bar(ratings.keys(), ratings.values(), color=colors)
+
+    ax.set_title('Liczba opinii według oceny gwiazdkowej', fontsize=16)
+    ax.set_xlabel('Ocena gwiazdkowa', fontsize=12)
+    ax.set_ylabel('Liczba opinii', fontsize=12)
+
+    img = BytesIO()
+    plt.savefig(img, format='png', dpi=300)
+    img.seek(0)
+    plt.close()
+    
+    time.sleep(0.05)
+
+    return Response(img.getvalue(), mimetype='image/png')
 
 # -------
 

@@ -8,12 +8,17 @@
 <table>
     <tr>
         <th>Produkt: {{ product.name }}</th>
-        <th>ID Produktu: <a class="white" href="https://www.ceneo.pl/{{ product.id }}", target="_blank">{{ product.id }}</a></th>
-        <th style="text-align: right;">
+        <th style="text-align: right; width: 250px;">ID Produktu: <a class="white" href="https://www.ceneo.pl/{{ product.id }}", target="_blank">{{ product.id }}</a></th>
+        <th style="text-align: right; width: 380px;">
             <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='csv') }}">Pobierz CSV</a>
             <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='xlsx') }}">Pobierz XLSX</a>
-            <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='json') }}">Pobierz JSON</a>
+            <a class="white" href="{{ url_for('download_reviews', product_id=product.id, format='json') }}">Pobierz JSON</a> 
+        </th>
+        <th style="text-align: center; width: 100px;">
             <a class="white" href="{{ url_for('charts', product_id=product.id) }}">Wykresy</a>
+        </th>
+        <th style="text-align,: left; width: 150px;">
+            <a class="white" href="{{ url_for('delete', product_id=product.id) }}">Usunąć produkt</a>
         </th>
     </tr>
 </table>
