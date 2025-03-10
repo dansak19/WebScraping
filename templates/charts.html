@@ -14,13 +14,13 @@
         </th>
     </tr>
 </table>
-<h2>Wykres kołowy:</h2>
+<h2>Wykres kołowy - podział opinii według rekomendacji</h2>
 <table style="border: 0px"><tr style="border: 0px"><th style="background-color: #ffffff; text-align: center; border: 0px">
-<img src="/products/{{ product_id }}/pie" alt="Pie Chart" style="width:70%; height:auto; align: right;">
+<img src="/products/{{ product_id }}/pie?unique={{ timestamp }}" alt="Pie Chart" style="width:70%; height:auto; align: right;">
 </th></tr></table>
-<h2>Wykres słupkowy:</h2>
+<h2>Wykres słupkowy - liczba opinii według oceny gwiazdkowej</h2>
 <table style="border: 0px"><tr style="border: 0px"><th style="background-color: #ffffff; text-align: center; border: 0px">
-<img src="/products/{{ product_id }}/bar" alt="Bar Chart" style="width:70%; height:auto; align: right;">
+<img src="/products/{{ product_id }}/bar?unique={{ timestamp }}" alt="Bar Chart" style="width:70%; height:auto; align: right;">
 </th></tr></table>
 
 {% endblock %}

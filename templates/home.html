@@ -4,11 +4,58 @@
 
 {% block content %}
 <h2>Witamy w Zbieraczu Opinii</h2>
-<p>This application allows extracting opinions from products and viewing them conveniently.</p>
+<p>Ta aplikacja umożliwia pobieranie opinii o produktach oraz ich wygodne przeglądanie.</p>
 <ul>
-    <li>Cel aplikacji: To facilitate easy access to product reviews and their management.</li>
-    <li>Opis działania aplikacji: Users can extract and view reviews for different products.</li>
-    <li>Zastosowane biblioteki: Flask for backend, Jinja2 for template rendering.</li>
-    <li>Zastosowane podejścia: MVC architecture, CRUD operations, RESTful services.</li>
+    <li>
+        Cel aplikacji:
+        <ul>
+            <li>Ułatwienie dostępu do opinii o produktach.</li>
+            <li>Dostarczenie przydatnych statystyk i wizualizacji.</li>
+            <li>Zarządzanie opiniami w prosty i intuicyjny sposób.</li>
+        </ul>
+    </li>
+    
+    <li>
+        Opis działania aplikacji:
+        <ul>
+            <li>Aplikacja pozwala na pobieranie opinii o produktach z serwisu Ceneo.pl za pomocą unikalnego identyfikatora produktu.</li>
+            <li>Opinie są gromadzone w uporządkowanej formie, co umożliwia ich przeglądanie oraz analizę statystyczną.</li>
+            <li>Użytkownicy mają dostęp do:
+                <ul>
+                    <li>Szczegółowych danych dotyczących opinii.</li>
+                    <li>Wykresów wizualizujących statystyki.</li>
+                    <li>Opcji eksportu danych (CSV, XLSX, JSON).</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Zastosowane biblioteki:
+        <ul>
+            <li>BeautifulSoup4 - Biblioteka do parsowania HTML i XML, używana do ekstrakcji opinii ze stron internetowych.</li>
+            <li>Flask - Lekki framework webowy do obsługi backendu aplikacji.</li>
+            <li>Jinja2 - Silnik szablonów do generowania dynamicznych stron HTML.</li>
+            <li>Matplotlib - Biblioteka do tworzenia wykresów i wizualizowania statystyk opinii.</li>
+            <li>Requests - Biblioteka do wykonywania zapytań HTTP, używana do pobierania danych z internetu (np. z Ceneo.pl).</li>
+            <li>XlsxWriter - Tool do eksportu danych (opinie) w formacie Excel (.xlsx).</li>
+            <li>json - Wbudowany moduł Pythona do obsługi formatu JSON, używany do zapisu i odczytu danych.</li>
+            <li>csv - Moduł do obsługi plików CSV dla eksportu i importu danych o opiniach.</li>
+            <li>time - Moduł Pythona do zarządzania czasem, np. przy tworzeniu nazw plików na podstawie daty i godziny.</li>
+            <li>os - Moduł do operacji na plikach i systemie plików, używany do zarządzania plikami i ścieżkami.</li>
+            <li>datetime - Moduł do pracy z datą i czasem, np. przy rejestrowaniu operacji w aplikacji.</li>
+            <li>threading (Lock) - Moduł pozwalający zarządzać wątkami w Pythonie oraz synchronizować operacje krytyczne przy użyciu blokad (Lock).</li>
+        </ul>
+    </li>
+    <li>Zastosowane podejścia:
+        <ul>
+            <li>Programowanie obiektowe (OOP): W projekcie zastosowano klasy do modelowania kluczowych elementów aplikacji, co pozwoliło na lepszą organizację kodu i skalowalność projektu.</li>
+            <li>Funkcje zwracające kody statusu: Funkcje w aplikacji zostały zaprojektowane w sposób zwracający kody statusu, co umożliwia łatwe śledzenie działania programu i prostszą identyfikację błędów.</li>
+            <li>Zarządzanie danymi w plikach JSON: Opinie o produktach są zapisywane i przechowywane w formacie JSON, który pełni rolę prostej bazy danych.</li>
+            <li>Bezpieczeństwo aplikacji: Aplikacja została zaprojektowana tak, aby niemożliwe było wystąpienie błędów, które mogłyby ją przerwać. Wszystkie potencjalne błędy są odpowiednio obsługiwane, a użytkownik otrzymuje stosowne komunikaty.</li>
+            <li>Wykorzystanie JavaScript: JavaScript został użyty w miejscach, gdzie było to konieczne, na przykład do realizacji dynamicznego przekierowywania użytkownika między stronami.</li>
+            <li>Estetyczny i funkcjonalny interfejs: Zastosowanie HTML i CSS pozwoliło na stworzenie przejrzystego oraz estetycznego interfejsu użytkownika.</li>
+            <li>Obsługa serwera za pomocą Flask: Projekt został w pełni zrealizowany jako aplikacja webowa, wykorzystując framework Flask do obsługi backendu, routingu i integracji z interfejsem użytkownika.</li>
+            <li>Czytelny, choć miejscami z aromatem spaghetti code: Kod aplikacji pozostał w dużej mierze czytelny, lecz momentami stał się nieco zagmatwany wraz z rozwojem projektu – ale wciąż jest łatwy do zrozumienia!</li>
+        </ul>
+    </li>
 </ul>
 {% endblock %}
