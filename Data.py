@@ -30,6 +30,14 @@ def get_ids():
     
     return ids
 
+def delete(id):
+    path = f"data/{id}.json"
+    try: 
+        os.unlink(path)
+        return 0
+    except:
+        return 1
+
 def delete_download():
     path = "download/"
     files = os.listdir(path)
