@@ -163,7 +163,7 @@ class Page:
         return self.author
     
     def get_recommendation(self, opinion):
-        self.recommendation = opinion.find("em", class_ = "recommended")
+        self.recommendation = opinion.find("span", class_ = "user-post__author-recomendation")
         if self.recommendation:
             self.recommendation = self.recommendation.text.strip()
         else: self.recommendation = None

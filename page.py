@@ -175,15 +175,14 @@ def pie_cart(product_id):
         
         explode = [0.1]
         for i in range(len(recomendations.keys()) - 1):
-            explode.append(0)
-        print(explode)
+            explode.append(float(f"0.0{i + 1}"))
     
         colors = ["#4A6572", "#C68F6C", "#7D7461"]
 
         fig, ax = plt.subplots()
         ax.pie(
             recomendations.values(),
-            explode = explode,
+            explode = sorted(explode),
             labels=recomendations.keys(),
             autopct='%1.1f%%', 
             colors=colors,
