@@ -8,7 +8,12 @@ class Page:
         self.url = f"https://www.ceneo.pl/{id}"
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-            "Referer": "https://www.google.com/"}
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Cache-Control": "max-age=0",
+            "Referer": "https://www.google.com/"
+        }
         
     def connect(self):
         try:
