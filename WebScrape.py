@@ -12,7 +12,7 @@ class Page:
         
     def connect(self):
         try:
-            self.base_page = requests.get(self.url)
+            self.base_page = requests.get(self.url, headers=self.headers)
             
             return {"code": 0}
         except:
@@ -72,7 +72,7 @@ class Page:
             return {"code": self.code}
         
     def get_comments(self):
-        self.page = requests.get(f"{self.url}#tab=reviews")
+        self.page = requests.get(f"{self.url}#tab=reviews", headers=self.headers)
         self.soup = BeautifulSoup(self.page.text, features="html.parser")
         self.comment_section = self.soup.find("div", class_ = "js_product-reviews js_reviews-hook js_product-reviews-container")
         
@@ -89,7 +89,7 @@ class Page:
                         
                 while self.n_page < self.n_pages:
                     self.n_page += 1
-                    self.page = requests.get(f"{self.url}/opinie-{self.n_page}")
+                    self.page = requests.get(f"{self.url}/opinie-{self.n_page}", headers=self.headers)
                     self.soup = BeautifulSoup(self.page.text, features="html.parser")
                     self.comment_section = self.soup.find("div", class_ = "js_product-reviews js_reviews-hook js_product-reviews-container")
                     if self.comment_section:
