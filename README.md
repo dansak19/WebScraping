@@ -56,6 +56,26 @@ Here are a few ways this application can be used:
 
 ---
 
+## **Potential Problems & Errors**
+
+While this application is designed specifically to scrape user comments from **ceneo.pl**, there are some inherent limitations and potential issues to be aware of:
+
+1. **Website Security Measures**  
+   Although the app is tailored for ceneo.pl, the site's security mechanisms—such as rate limiting, bot detection, or Captchas—may occasionally interfere with the scraping process. As a result, issues can arise, particularly when attempting to scrape pages from a server environment.
+
+2. **Server vs. Local Machine Execution**  
+   Running the `page.py` script directly from your **own computer (local machine)** is much more reliable and will almost certainly load and scrape the first page successfully. However, running the same script from a **server environment** may lead to less reliable results due to the server's IP being flagged by ceneo.pl's security systems or other unforeseen factors.
+
+3. **Limitations on Scraping Multiple Pages**  
+   While the app is capable of accessing comments across multiple pages of a product, there is no **100% guarantee** that it will successfully scrape more than one page in all cases. Issues such as connection interruptions, site-specific limitations, or security measures may prevent this feature from always working as intended.
+
+4. **Confidence in the First Page**  
+   If the app is run from your local machine, scraping the **first page of comments** should always succeed. However, when running the app on a remote server, I cannot promise the same reliability for even the first page due to the aforementioned security-related constraints.
+
+If you encounter recurring problems or see room for improvement, please feel free to open an issue or contribute to the repository.
+
+---
+
 ## **Acknowledgments**
 
 I’d like to express my gratitude to my teachers and everyone else who helped along the way:
