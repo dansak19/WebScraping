@@ -7,6 +7,7 @@ Welcome to **Web Scraper**, an application designed to extract and analyze produ
 ## **Purpose of the Application**
 
 The main goal of the application is to:
+
 - Simplify access to product reviews.
 - Provide useful insights through statistics and visualizations.
 - Help users manage and analyze reviews in a structured and intuitive way.
@@ -16,6 +17,7 @@ The main goal of the application is to:
 ## **How the Application Works**
 
 The application allows users to retrieve product reviews from Ceneo.pl using a unique product ID. It collects the following information for each review:
+
 - Reviewer information (e.g., username).
 - Recommendations (positive/negative).
 - Star ratings.
@@ -25,10 +27,36 @@ The application allows users to retrieve product reviews from Ceneo.pl using a u
 - Feedback details (e.g., helpful or non-helpful votes).
 
 Once the reviews are extracted, they are saved in a manageable structure (e.g., JSON, CSV, or XLSX). Users can then view the reviews along with statistical data and graphical visualizations of collected metrics, such as:
+
 - The distribution of star ratings (bar charts).
 - The proportion of recommendations (pie charts).
 
 The interface is built using **Flask**, with HTML, CSS, and essential JavaScript for a smooth user experience. All functionality has been designed with error handling, ensuring stability during use.
+
+---
+
+## How to Run the Project
+
+### Preparation
+
+Ensure that you have **Python** (version 3.7+) installed: [Download Python](https://www.python.org/downloads/)
+
+### Setup and Running Instructions
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/mshablovskyy/WebScraping.git
+   cd WebScraping
+2. Install the required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+3. Start the application:
+
+   ```bash
+   python page.py
+### Cool, now everything should be ready! Just copy the adress of your local server to the terminal, open it in your browser and enjoy.
 
 ---
 
@@ -38,7 +66,9 @@ Hello! My name is **Maksym Shablovskyy**, student ID **237161**, and I’m the d
 This application is my first completed project, and I’m incredibly proud of it. It was a great challenge – one that helped me learn and work with various new technologies. Despite encountering difficulties, I successfully handled everything and greatly enjoyed the experience.
 
 ### **Inspirations and Learning**
+
 While working on the project, I aimed to not only complete an assignment but also build something meaningful that could help users. The experience taught me:
+
 - Advanced programming practices.
 - How to handle real-world data processing tasks.
 - Web development using Flask and integration with JavaScript, HTML, and CSS for an optimized interface.
@@ -49,6 +79,7 @@ While working on the project, I aimed to not only complete an assignment but als
 ## **Potential Use Cases**
 
 Here are a few ways this application can be used:  
+
 - **Helping consumers**: Easily compare reviews and ratings before purchasing a product.  
 - **For marketing analysts**: Analyze customer feedback to better understand product strengths and weaknesses.  
 - **Data handling**: Export reviews in `.json`, `.csv`, or `.xlsx` format for further external processing.  
@@ -79,6 +110,7 @@ If you encounter recurring problems or see room for improvement, please feel fre
 ## **Acknowledgments**
 
 I’d like to express my gratitude to my teachers and everyone else who helped along the way:
+
 - **To my teachers:** Thank you for your knowledge, guidance, and valuable advice during this project.  
 
 ---
