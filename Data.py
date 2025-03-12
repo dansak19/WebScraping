@@ -4,131 +4,134 @@ import xlsxwriter
 import os
 import re
 
-def save(id, name, amount, opinions):
-    data = {"name": name,
-            "opinions amount": amount,
-            "opinions": opinions}
+class Database():
+    def __init__(self, id = None):
+        self.id = id
     
-    path = f"data/{id}.json"
+    def save(self, name, amount, opinions):
+        self.data = {"name": name,
+                "opinions amount": amount,
+                "opinions": opinions}
     
-    with open(path, "w") as file:
-        json.dump(data, file, indent=4)
+        self.path = f"data/{self.id}.json"
+    
+        with open(self.path, "w") as file:
+            json.dump(self.data, file, indent=4)
         
-def get(id):
-    path = f"data/{id}.json"
+    def get(self):
+        self.path = f"data/{self.id}.json"
     
-    with open(path, "r") as file:
-        data = json.load(file)
+        with open(self.path, "r") as file:
+            data = json.load(file)
     
-    return data
+        return data
 
-def get_ids():
-    path = "data/"
-    files = os.listdir(path)
-    ids = re.findall("\\d+\\.json", str(files))
-    ids = [id[:-5] for id in ids]
+    def get_ids(self):
+        self.path = "data/"
+        self.files = os.listdir(self.path)
+        self.ids = re.findall("\\d+\\.json", str(self.files))
+        self.ids = [id[:-5] for id in self.ids]
     
-    return ids
+        return self.ids
 
-def delete(id):
-    path = f"data/{id}.json"
-    try: 
-        os.unlink(path)
-        return 0
-    except:
-        return 1
+    def delete(self):
+        self.path = f"data/{self.id}.json"
+        try: 
+            os.unlink(self.path)
+            return 0
+        except:
+            return 1
 
-def delete_download():
-    path = "download/"
-    files = os.listdir(path)
-    for file in files:
-        os.unlink(path + file)
-
-def save_json(id):
-    delete_download()
-    data = get(id)
+class Download():
+    def __init__(self, id):
+        self.id = id
+        self.product = Database(self.id)
+        self.data = self.product.get()
     
-    path = f"download/{id}.json"
+    def delete_download(self):
+        path = "download/"
+        files = os.listdir(path)
+        for file in files:
+            os.unlink(path + file)
+
+    def json(self):
+        self.delete_download()
     
-    with open(path, "w") as file:
-        json.dump(data, file, indent=4)
+        path = f"download/{self.id}.json"
+    
+        with open(path, "w") as file:
+            json.dump(self.data, file, indent=4)
         
-    return path
+        return path
     
 
-def save_xlsx(id):
-    delete_download()
-    data = get(id)
-    
-    path = f"download/{id}.xlsx"
-    
-    book = xlsxwriter.Workbook(path)
-    sheet1 = book.add_worksheet("about")
-    
-    
-    sheet1.write(0, 0, "Id:")
-    sheet1.write(0, 1, id)
-    sheet1.write(1, 0, "Name:")
-    sheet1.write(1, 1, data["name"])
-    sheet1.write(2, 0, "Opinions amount:")
-    sheet1.write(2, 1, data["opinions amount"])
-    
-    if data["opinions"]:
-        sheet2 = book.add_worksheet("opinions")
-        for i, key in enumerate(data["opinions"][0].keys()):
-            sheet2.write(0, i, key)
-        for i, opinion in enumerate(data["opinions"]):
-            for j, value in enumerate(opinion.values()):
-                if str(type(value)) == "<class 'list'>":
-                    l = value
-                    value = ''
-                    for r in l:
-                        value += f"{r} "
-                sheet2.write(i + 1, j, value)
-    else: sheet1.write(2, 1, 0)
-            
-    
-    book.close()
-    
-    return path
-
-def save_csv(id):
-    delete_download()
-    
-    data = get(id)
-    
-    path = f"download/{id}.csv"
-    
-    with open(path, "w") as file:
-        csv_file = csv.writer(file)
+    def xlsx(self):
+        self.delete_download()
         
-        csv_file.writerow(["id:", id])
-        csv_file.writerow(["name:", data["name"]])
+        path = f"download/{id}.xlsx"
         
-        if data["opinions amount"]:
-            csv_file.writerow(["opinions amount:", data["opinions amount"]])
-        else: 
-            csv_file.writerow(["opinions amount:", 0])
-            
-        if data["opinions"]:
-            csv_file.writerow("")
-            csv_file.writerow(data["opinions"][0].keys())
-            
-            for opinion in data["opinions"]:
-                review = []
-                for k, v in opinion.items():
-                    if (k == "advantages" or k == "disadvantages") and v:
-                        l = v
-                        v = ''
+        book = xlsxwriter.Workbook(path)
+        sheet1 = book.add_worksheet("about")
+        
+        
+        sheet1.write(0, 0, "Id:")
+        sheet1.write(0, 1, self.id)
+        sheet1.write(1, 0, "Name:")
+        sheet1.write(1, 1, self.data["name"])
+        sheet1.write(2, 0, "Opinions amount:")
+        sheet1.write(2, 1, self.data["opinions amount"])
+        
+        if self.data["opinions"]:
+            sheet2 = book.add_worksheet("opinions")
+            for i, key in enumerate(self.data["opinions"][0].keys()):
+                sheet2.write(0, i, key)
+            for i, opinion in enumerate(self.data["opinions"]):
+                for j, value in enumerate(opinion.values()):
+                    if str(type(value)) == "<class 'list'>":
+                        l = value
+                        value = ''
                         for r in l:
-                            v += f"{r} "
-                        v = v[:-1]
-                            
-                    review.append(v)
-                    
-                csv_file.writerow(review)
-                
-    return path
+                            value += f"{r} "
+                    sheet2.write(i + 1, j, value)
+        else: sheet1.write(2, 1, 0)
+            
+    
+        book.close()
+    
+        return path
+
+    def csv(self):
+        self.delete_download()
         
-if __name__ == "__main__":
-    save_csv("66786315")
+        path = f"download/{self.id}.csv"
+        
+        with open(path, "w") as file:
+            csv_file = csv.writer(file)
+        
+            csv_file.writerow(["id:", self.id])
+            csv_file.writerow(["name:", self.data["name"]])
+        
+            if self.data["opinions amount"]:
+                csv_file.writerow(["opinions amount:", self.data["opinions amount"]])
+            else: 
+                csv_file.writerow(["opinions amount:", 0])
+            
+            if self.data["opinions"]:
+                csv_file.writerow("")
+                csv_file.writerow(self.data["opinions"][0].keys())
+
+                for opinion in self.data["opinions"]:
+                    review = []
+                    for k, v in opinion.items():
+                        if (k == "advantages" or k == "disadvantages") and v:
+                            l = v
+                            v = ''
+                            for r in l:
+                                v += f"{r} "
+                            v = v[:-1]
+
+                        review.append(v)
+
+                    csv_file.writerow(review)
+                
+        return path

@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, send_file,
 import matplotlib
 import matplotlib.pyplot as plt
 from io import BytesIO
-import WebScrape
-import Data
+from WebScrape import Page
+from Data import Database, Download 
 from datetime import datetime
 from threading import Lock
 
@@ -26,7 +26,7 @@ def extract():
 @app.route('/extract', methods=['POST'])
 def start_extraction():
     code = request.form['product_id']
-    product = WebScrape.Page(code)
+    product = Page(code)
     check = product.connect()
     name = product.get_product_name()
     if not check['code'] and not name['code']:
@@ -39,7 +39,8 @@ def start_extraction():
 @app.route('/product/<product_id>')
 def product_page(product_id):
     url = f'https://www.ceneo.pl/{product_id}'
-    name = Data.get(product_id)["name"]
+    product = Database(product_id)
+    name = product.get()["name"]
     return render_template('redirect.html', url=url, name = name, product_id = product_id)
     
 @app.route('/product/error/<product_id>')
@@ -53,8 +54,9 @@ def about():
 @app.route('/products')
 def products():
     extracts = []
-    for id in Data.get_ids():
-        x =  Data.get(id)
+    for id in Database().get_ids():
+        p = Database(id)
+        x =  p.get()
         x["id"] = id
         extracts.append(x)
     
@@ -91,7 +93,8 @@ def products():
 
 @app.route('/products/<product_id>')
 def product_detail(product_id):
-    product = Data.get(product_id)
+    product = Database(product_id)
+    product = product.get()
     product["id"] = product_id
     reviews = []
     opinions = product["opinions"]
@@ -129,30 +132,35 @@ def product_detail(product_id):
 
 @app.route('/download/<product_id>/<format>')
 def download_reviews(product_id, format):
+    file = Download(product_id)
     if format == "csv":
-        path = Data.save_csv(product_id)
+        path = file.csv()
     elif format == "xlsx":
-        path = Data.save_xlsx(product_id)
+        path = file.xlsx()
     elif format == "json":
-        path = Data.save_json(product_id)
+        path = file.json()
     print(path)
     return send_file(path, as_attachment=True)
 
 @app.route('/products/<product_id>/charts')
 def charts(product_id):
-    name = Data.get(product_id)["name"]
+    product = Database(product_id)
+    name = product.get()["name"]
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S%f')
     return render_template('charts.html', name = name, product_id = product_id, timestamp=timestamp)
+
 @app.route('/products/<product_id>/delete')
 def delete(product_id):
-    name = Data.get(product_id)["name"]
-    Data.delete(product_id)
+    product = Database(product_id)
+    name = product.get()["name"]
+    product.delete()
     return render_template('delete.html', name = name, product_id = product_id)
 
 @app.route('/products/<product_id>/pie')
 def pie_cart(product_id):
     with chart_lock:
-        opinions = Data.get(product_id)["opinions"]
+        product = Database(product_id)
+        opinions = product.get()["opinions"]
         recomendations = {'Polecam': 0, 
                           'Nie polecam': 0, 
                           'Niema rekomendacji': 0}
@@ -205,7 +213,8 @@ def pie_cart(product_id):
 @app.route('/products/<product_id>/bar')
 def bar_chart(product_id):
     with chart_lock:
-        opinions = Data.get(product_id)["opinions"]
+        product = Database(product_id)
+        opinions = product.get()["opinions"]
         ratings = {}
         scores = []
         for opinion in opinions:
@@ -240,7 +249,7 @@ def bar_chart(product_id):
 # -------
 
 def save_product(id):
-    product = WebScrape.Page(id)
+    product = Page(id)
     if not product.connect()["code"]:
         name = product.get_product_name()
         if not name["code"]:
@@ -254,8 +263,9 @@ def save_product(id):
                 comments = comments["result"]
             else:
                 comments = None
-        
-            Data.save(id, name, amount, comments)
+                
+            product = Database(id)
+            product.save(name, amount, comments)
 
 # -------
 
